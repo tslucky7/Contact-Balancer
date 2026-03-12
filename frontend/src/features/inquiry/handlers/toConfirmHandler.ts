@@ -6,6 +6,7 @@ import { toEditHandler } from './toEditHandler';
 import { submitHandler } from './submitHandler';
 import { setHeading } from '../components/heading';
 import { readForm, saveSession } from '../adapters/formDataAdapter';
+import { validateInquiry, getValidationErrors, getValidationErrorMessage } from '../validation/inquiryValidator';
 
 /**
  * ボタンのクリックに応じて確認画面を構築
@@ -13,25 +14,26 @@ import { readForm, saveSession } from '../adapters/formDataAdapter';
  * @returns
  */
 export const toConfirmHandler = (event: Event): void => {
+  // 入力された情報を取得し、stateに代入する
+  readForm(dom.form, state);
   // 必須項目が全て入力されているかをチェック
-  const isValid = dom.form.checkValidity();
+  const isValid = validateInquiry(state);
+
   if (!isValid) {
     event.preventDefault();
-    alert('すべての必須項目を入力してください');
+    const errors = getValidationErrors();
+    const errorMessage = getValidationErrorMessage(errors);
+    alert(errorMessage);
     return;
   }
-
+  
   event.preventDefault();
-
   // 確認画面用のpathを追加する
   history.pushState({ step: STEPS.CONFIRM }, '', STEPS.CONFIRM);
 
   // 入力画面を非表示化
   dom.stepEdit.classList.add('hidden');
   dom.stepConfirm.replaceChildren();
-
-  // 入力された情報の取得
-  readForm(dom.form, state);
 
   saveSession(state);
 

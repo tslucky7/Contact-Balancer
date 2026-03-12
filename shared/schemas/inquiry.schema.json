@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Inquiry",
+  "description": "問い合わせフォームの入力データ定義",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "お名前",
+      "minLength": 1,
+      "maxLength": 50,
+      "description": "必須入力、最大50文字"
+    },
+    "email": {
+      "type": "string",
+      "title": "メールアドレス",
+      "format": "email",
+      "description": "必須入力、メールアドレス形式"
+    },
+    "subject": {
+      "type": "string",
+      "title": "件名",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "必須入力、最大100文字"
+    },
+    "message": {
+      "type": "string",
+      "title": "お問い合わせ内容",
+      "minLength": 1,
+      "maxLength": 2000,
+      "description": "必須入力、最大2000文字"
+    }
+  },
+  "required": ["name", "email", "subject", "message"],
+  "additionalProperties": false
+}
