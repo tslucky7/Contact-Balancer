@@ -7,6 +7,7 @@ namespace App\Controllers;
 use App\Utils\RequestParser;
 use App\Models\Inquiry;
 use App\Services\InquiryService;
+use App\Validation\ValidatorInterface;
 use Throwable;
 
 /**
@@ -14,15 +15,24 @@ use Throwable;
  */
 class InquiryController {
   private InquiryService $inquiryService;
+  private ValidatorInterface $validator;
 
-  public function __construct(InquiryService $inquiryService) {
+  public function __construct(
+    InquiryService $inquiryService, 
+    ValidatorInterface $validator
+  ) {
     $this->inquiryService = $inquiryService;
+    $this->validator = $validator;
   }
 
   /**
    * 
    * - リクエストメソッドがPOSTかどうかを確認
    * - リクエストボディをJSON形式で取得
+   * - リクエストボディを検証
+   * - リクエストボディを問い合わせオブジェクトに変換
+   * - 問い合わせを処理
+   * - 問い合わせ結果を返却
    * @return void
    */
   public function handleRequest(): void {
@@ -35,7 +45,13 @@ class InquiryController {
 
     try {
       $data = RequestParser::getJsonInput();
-      $this->validateRequest($data);
+
+      $result = $this->validator->validate($data);
+      if (!$result['isValid']) {
+        http_response_code(400);
+        echo json_encode(['ok' => false, 'error' => $result['errors']]);
+        exit;
+      }
 
       $inquiry = new Inquiry($data);
       $this->inquiryService->processInquiry($inquiry);
@@ -58,27 +74,6 @@ class InquiryController {
           'ok' => false, 
           'error' => $e->getMessage(),
         ], JSON_UNESCAPED_UNICODE);
-      exit;
-    }
-  }
-
-  /**
-   * リクエストボディをJSON形式で取得し、必須項目が不足していないかを確認する
-   * @param array $data
-   * @return void
-   */
-  private function validateRequest(array $data): void {
-    $name = trim((string)($data['name'] ?? ''));
-    $email = trim((string)($data['email'] ?? ''));
-    $subject = trim((string)($data['subject'] ?? ''));
-    $message = trim((string)($data['message'] ?? ''));
-
-    if ($name === '' || $email === '' || $subject === '' || $message === '') {
-      http_response_code(400);
-      echo json_encode([
-        'ok' => false, 
-        'error' => '必須項目が不足しています',
-      ], JSON_UNESCAPED_UNICODE);
       exit;
     }
   }

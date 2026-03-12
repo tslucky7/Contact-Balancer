@@ -12,6 +12,7 @@ use App\Services\BacklogService;
 use App\Services\InquiryService;
 use App\Services\SlackService;
 use App\Utils\HttpClient;
+use App\Validation\InquirySchemaValidator;
 use Throwable;
 use Monolog\Logger;
 
@@ -21,7 +22,8 @@ $backlogService = new BacklogService($httpClient);
 $slackService = new SlackService();
 $logger = new Logger('InquiryService');
 $inquiryService = new InquiryService($repository, $backlogService, $slackService, $logger);
-$controller = new InquiryController($inquiryService);
+$validator = new InquirySchemaValidator();
+$controller = new InquiryController($inquiryService, $validator);
 
 try {
   $controller->handleRequest();
