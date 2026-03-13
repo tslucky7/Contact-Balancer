@@ -29,13 +29,20 @@ class Inquiry {
     
     private ?string $errorMessage = null;
 
-    public function __construct(array $data) {
-        $this->requestId = $data['request_id'] ?? bin2hex(random_bytes(16));
-        $this->name = $data['name'];
-        $this->email = $data['email'];
-        $this->subject = $data['subject'];
-        $this->message = $data['message'];
-        $this->status = $data['status'] ?? self::STATUS_PENDING;
+    public function __construct(
+      string $requestId,
+      string $name,
+      string $email, 
+      string $subject,
+      string $message,
+      string $status
+    ) {
+        $this->requestId = $requestId;
+        $this->name = $name;
+        $this->email = $email;
+        $this->subject = $subject;
+        $this->message = $message;
+        $this->status = $status;
     }
 
     public function getStatus(): string { 

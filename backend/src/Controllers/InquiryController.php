@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Factories\InquiryFactory;
 use App\Utils\RequestParser;
-use App\Models\Inquiry;
 use App\Services\InquiryService;
 use App\Validation\ValidatorInterface;
 use Throwable;
@@ -46,14 +46,14 @@ class InquiryController {
     try {
       $data = RequestParser::getJsonInput();
 
-      $result = $this->validator->validate($data);
-      if (!$result['isValid']) {
+      $validatedData = $this->validator->validate($data);
+      if (!$validatedData['isValid']) {
         http_response_code(400);
-        echo json_encode(['ok' => false, 'error' => $result['errors']]);
+        echo json_encode(['ok' => false, 'error' => $validatedData['errors']]);
         exit;
       }
 
-      $inquiry = new Inquiry($data);
+      $inquiry = InquiryFactory::create($data);
       $this->inquiryService->processInquiry($inquiry);
 
       http_response_code(200);
