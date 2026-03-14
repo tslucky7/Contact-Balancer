@@ -13,9 +13,12 @@ export function createButton(
   const buttonElement = document.createElement('button');
   buttonElement.type = buttonType;
   buttonElement.id = buttonType === 'submit' ? 'inquiry-submit-button' : 'inquiry-back-button';
-  buttonElement.className = 'w-max px-4 py-2 border text-white text-base';
+  buttonElement.className =
+    'w-max border px-4 py-2 text-base text-white transition-colors';
   buttonElement.classList.add(
-    buttonType === 'submit' ? 'bg-indigo-900' : 'bg-gray-500',
+    buttonType === 'submit'
+      ? 'border-indigo-950 bg-indigo-900 hover:bg-indigo-800 dark:border-indigo-400 dark:bg-indigo-500 dark:hover:bg-indigo-400'
+      : 'border-slate-600 bg-slate-600 hover:bg-slate-500 dark:border-slate-400 dark:bg-slate-500 dark:hover:bg-slate-400',
   );
   buttonElement.textContent = text;
   // ボタンをクリックした時の処理を設定

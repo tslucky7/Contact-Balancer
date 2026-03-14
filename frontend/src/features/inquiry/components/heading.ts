@@ -13,7 +13,7 @@ export const setHeading = (text: string): void => {
 export const createHeading = (text: string): HTMLHeadingElement => {
   const headingElement = document.createElement('h1');
   headingElement.id = 'inquiry-heading';
-  headingElement.className = 'heading font-bold text-3xl';
+  headingElement.className = 'heading text-3xl font-bold text-slate-900 dark:text-slate-100';
   headingElement.textContent = text;
 
   return headingElement;
