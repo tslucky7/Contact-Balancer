@@ -11,6 +11,7 @@ import {
 import { saveSession } from './features/inquiry/adapters/formDataAdapter';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { ThemeSelect } from './components/ui/ThemeSelect';
+import { submitAPI } from './features/inquiry/api/api';
 
 type FormStep = 'edit' | 'confirm' | 'complete';
 
@@ -62,6 +63,30 @@ export default function InquiryForm() {
     // router.push('/confirm') など
   };
 
+  const handleToComplete = async (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    const target = event.target as HTMLButtonElement;
+    if (!(target.type === 'submit')) {
+      console.error('submitHandler: event is not a SubmitEvent');
+      return;
+    }
+
+    event.preventDefault();
+
+    const payload = { ...formData };
+    try {
+      const json = await submitAPI(payload);
+      console.log('Response JSON:', json);
+
+      // todo: 完了画面表示用の関数に分離する
+      sessionStorage.removeItem('inquiry');
+      setStep('complete');
+    } catch (error) {
+      console.error('The connection failed.', error);
+    }
+  };
+
   return (
     <ThemeProvider>
       <ThemeSelect />
@@ -78,7 +103,7 @@ export default function InquiryForm() {
             <ConfirmView
               data={formData}
               onBack={() => setStep('edit')}
-              onComplete={() => setStep('complete')}
+              onComplete={handleToComplete}
             />
           )}
           {step === 'complete' && <CompleteView data={formData} />}
