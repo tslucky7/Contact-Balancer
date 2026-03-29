@@ -2,7 +2,8 @@ import type { Theme } from './theme.types';
 
 export const STORAGE_KEY = 'theme';
 
-export const getDarkQuery = () => window.matchMedia('(prefers-color-scheme: dark)');
+export const getDarkQuery = () =>
+  window.matchMedia('(prefers-color-scheme: dark)');
 export const getSavedTheme = () => localStorage.getItem(STORAGE_KEY) as Theme;
 
 /**

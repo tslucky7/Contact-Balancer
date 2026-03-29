@@ -55,11 +55,11 @@ export const EditView = ({ data, onChange, onNext }: EditViewProps) => {
         required
         autoComplete="message"
       />
-      {/* todo: ボタンの背景色が戻るボタン用になっているため、背景色の序の切り替え条件をcolorStyle:prev,nextみたいに変更する必要がある */}
       <Button
         buttonType="button"
         text="入力内容の確認へ進む"
         eventHandler={onNext}
+        colorScheme="next"
       />
     </div>
   );
