@@ -1,4 +1,4 @@
-import { useTheme } from '../../features/inquiry/hooks/useTheme';
+import { useTheme } from '../../hooks/useTheme';
 
 export const ThemeSelect = () => {
   const { theme, setTheme } = useTheme();
