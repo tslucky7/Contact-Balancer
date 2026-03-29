@@ -8,7 +8,7 @@ import { Heading } from '../../../components/ui/heading';
 interface ConfirmViewProps {
   data: InquiryFormData;
   onBack: () => void;
-  onComplete: () => void;
+  onComplete: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 /**
