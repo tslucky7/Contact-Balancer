@@ -38,8 +38,18 @@ export const ConfirmView = ({ data, onBack, onComplete }: ConfirmViewProps) => {
         )}
       </div>
       <div className="flex justify-end gap-x-4">
-        <Button buttonType="button" text="戻る" eventHandler={onBack} />
-        <Button buttonType="submit" text="送信する" eventHandler={onComplete} />
+        <Button
+          buttonType="button"
+          text="戻る"
+          eventHandler={onBack}
+          colorScheme="prev"
+        />
+        <Button
+          buttonType="submit"
+          text="送信する"
+          eventHandler={onComplete}
+          colorScheme="next"
+        />
       </div>
     </div>
   );
