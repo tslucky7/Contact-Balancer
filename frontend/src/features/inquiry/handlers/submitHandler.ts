@@ -1,5 +1,5 @@
 import { submitAPI } from '../api/api';
-import { dom, state } from '../state/context';
+import { state } from '../state/context';
 import { toCompleteHandler } from './toCompleteHandler';
 
 /**
@@ -22,7 +22,6 @@ export const submitHandler = async (event: Event): Promise<void> => {
     const json = await submitAPI(Payload);
     // 変更予定：　okだったら画面上にレスポンスを描画する
     console.log('Response JSON:', json);
-    dom.form.reset();
 
     toCompleteHandler();
   } catch (error) {

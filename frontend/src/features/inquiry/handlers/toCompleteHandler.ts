@@ -1,7 +1,4 @@
-import { createCompleteContent } from "../components/completeContent";
-import { dom } from "../state/context";
-import { STEPS } from "../types/types";
-import { setHeading } from "../components/heading";
+import { STEPS } from '../types/types';
 
 /**
  * 完了画面を動的に表示する
@@ -10,17 +7,6 @@ import { setHeading } from "../components/heading";
 export const toCompleteHandler = (): void => {
   sessionStorage.removeItem('inquiry');
 
-  if (!dom.stepEdit.classList.contains('hidden')) {
-    dom.stepEdit.classList.add('hidden');
-  }
-
-  dom.stepConfirm.replaceChildren();
-  dom.stepComplete.replaceChildren();
-
-  setHeading('送信完了');
-  const completeContent = createCompleteContent();
-  dom.stepComplete.append(completeContent);
-
-  console.log('送信完了'); 
+  console.log('送信完了');
   history.pushState({ step: STEPS.COMPLETE }, '', STEPS.COMPLETE);
-}
+};
