@@ -1,6 +1,4 @@
-import { dom } from "../state/context";
-import { STEPS } from "../types/types";
-import { resetStepsToEdit } from "../dom/utils";
+import { STEPS } from '../types/types';
 
 /**
  * 入力画面へ戻る
@@ -8,6 +6,4 @@ import { resetStepsToEdit } from "../dom/utils";
 export const toEditHandler = (event: Event): void => {
   event.preventDefault();
   history.replaceState(null, '', STEPS.EDIT);
-
-  resetStepsToEdit(dom);
 };

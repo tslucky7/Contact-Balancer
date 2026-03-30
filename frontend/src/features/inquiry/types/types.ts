@@ -6,15 +6,6 @@ type InquiryFieldKey = keyof typeof schema.properties;
 // formDataはキー自動追従
 export type InquiryFormData = Record<InquiryFieldKey, string>;
 
-export interface InquiryDom {
-  form: HTMLFormElement;
-  heading: HTMLHeadingElement;
-  stepEdit: HTMLDivElement;
-  stepConfirm: HTMLDivElement;
-  stepComplete: HTMLDivElement;
-  toConfirmButton: HTMLButtonElement;
-}
-
 interface InquirySchemaProperty {
   type: 'string';
   title: string;
@@ -44,4 +35,4 @@ export const STEPS: {
   COMPLETE: '/complete',
 } as const;
 
-export type Step = typeof STEPS[keyof typeof STEPS];
+export type Step = (typeof STEPS)[keyof typeof STEPS];

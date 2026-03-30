@@ -1,6 +1,5 @@
-import { dom, state } from "../state/context";
+import { state } from "../state/context";
 import { STEPS } from "../types/types";
-import { resetStepsToEdit } from "../dom/utils";
 import { toConfirmHandler } from "./toConfirmHandler";
 import { loadSession, writeForm } from "../adapters/formDataAdapter";
 
@@ -14,13 +13,10 @@ export const routeHandler = (): void => {
   switch (pathname) {
     case STEPS.EDIT:
       console.log('case: STEPS.EDIT');
-      restoreFormFromSession(dom.form);
-      resetStepsToEdit(dom);
 
       break;
     case STEPS.CONFIRM:
       console.log('case: STEPS.CONFIRM');
-      restoreFormFromSession(dom.form);
       setStateFromSession();
 
       // 入力データがない場合は入力画面へ戻すなどの制御もここで行う
@@ -41,7 +37,6 @@ export const routeHandler = (): void => {
     default:
       // それ以外（空や #edit）なら、入力画面を表示する（デフォルトは入力画面）
       console.log('case: default');
-      resetStepsToEdit(dom);
 
       break;
   }
