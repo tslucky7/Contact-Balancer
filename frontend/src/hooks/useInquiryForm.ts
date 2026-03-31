@@ -1,30 +1,23 @@
 import { useState } from 'react';
-import type { InquiryFormData } from '../features/inquiry/types/types';
-import schema from '../../../shared/schemas/inquiry.schema.json';
 import {
-  validateInquiry,
-  getValidationErrors,
-  getValidationErrorMessage,
-} from '../features/inquiry/validation/inquiryValidator';
-import { saveSession } from '../features/inquiry/adapters/formDataAdapter';
+  STEPS,
+  type InquiryFormData,
+  type Step,
+} from '../features/inquiry/types/types.ts';
+
+import { createEmptyFormData } from '../features/inquiry/model/formData';
+import { getInquiryValidationMessage } from '../features/inquiry/validation/inquiryValidator';
+import {
+  clearSession,
+  saveSession,
+} from '../features/inquiry/adapters/formDataAdapter';
+
 import { submitAPI } from '../features/inquiry/api/api';
 
-type FormStep = 'edit' | 'confirm' | 'complete';
-
 export const useInquiryForm = () => {
-  const [step, setStep] = useState<FormStep>('edit');
-
-  /**
-   * 空のフォームデータを作成する
-   * @returns
-   */
-  const createEmptyFormData = (): InquiryFormData => {
-    const keys = Object.keys(schema.properties) as (keyof InquiryFormData)[];
-    return Object.fromEntries(keys.map((k) => [k, ''])) as InquiryFormData;
-  };
-  const [formData, setFormData] = useState<InquiryFormData>(
-    () => createEmptyFormData(),
-  );
+  const [step, setStep] = useState<Step>(STEPS.EDIT as Step);
+  const [formData, setFormData] =
+    useState<InquiryFormData>(createEmptyFormData);
 
   /**
    * フォームのデータを更新する
@@ -52,14 +45,13 @@ export const useInquiryForm = () => {
   const handleToConfirm = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
-    const isValid = validateInquiry(formData);
-    if (!isValid) {
-      const errors = getValidationErrors();
-      alert(getValidationErrorMessage(errors));
+    const message = getInquiryValidationMessage(formData);
+    if (message) {
+      alert(message);
       return;
     }
 
-    setStep('confirm');
+    setStep(STEPS.CONFIRM);
     setFormData(formData);
     saveSession(formData);
     // router.push('/confirm') など
@@ -70,7 +62,7 @@ export const useInquiryForm = () => {
    * @returns
    */
   const handleBackToEdit = () => {
-    setStep('edit');
+    setStep(STEPS.EDIT);
   };
 
   /**
@@ -94,9 +86,8 @@ export const useInquiryForm = () => {
       const json = await submitAPI(payload);
       console.log('Response JSON:', json);
 
-      // todo: 完了画面表示用の関数に分離する
-      sessionStorage.removeItem('inquiry');
-      setStep('complete');
+      clearSession();
+      setStep(STEPS.COMPLETE);
     } catch (error) {
       console.error('The connection failed.', error);
     }

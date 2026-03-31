@@ -41,3 +41,11 @@ export const loadSession = (): InquiryFormData | null => {
 export const saveSession = (state: InquiryFormData): void => {
   sessionStorage.setItem('inquiry', JSON.stringify(state));
 };
+
+/**
+ * sessionStorage から問い合わせデータを削除する
+ * @returns
+ */
+export const clearSession = (): void => {
+  sessionStorage.removeItem('inquiry');
+};

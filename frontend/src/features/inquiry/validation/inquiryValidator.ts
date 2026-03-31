@@ -33,3 +33,17 @@ export const getValidationErrors = (): string[] => {
 export const getValidationErrorMessage = (errors: string[]): string => {
   return errors.join('\n');
 };
+
+/**
+ * 問い合わせフォームの入力データを検証
+ * @param data
+ * @returns
+ */
+export const getInquiryValidationMessage = (data: InquiryFormData): string | null => {
+  const isValid = validateInquiry(data);
+  if (!isValid) {
+    const errors = getValidationErrors();
+    return getValidationErrorMessage(errors);
+  }
+  return null;
+};

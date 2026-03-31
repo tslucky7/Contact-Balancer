@@ -4,6 +4,7 @@ import { CompleteView } from './features/inquiry/components/CompleteView.tsx';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { ThemeSelect } from './components/ui/ThemeSelect';
 import { useInquiryForm } from './hooks/useInquiryForm';
+import { STEPS } from './features/inquiry/types/types';
 
 export default function InquiryForm() {
   const {
@@ -20,21 +21,21 @@ export default function InquiryForm() {
       <ThemeSelect />
       <div className="container mx-auto max-w-3xl p-4 sm:p-8">
         <form id="inquiryForm" className="px-2">
-          {step === 'edit' && (
+          {step === STEPS.EDIT && (
             <EditView
               data={formData}
               onChange={handleChange}
               onNext={handleToConfirm}
             />
           )}
-          {step === 'confirm' && (
+          {step === STEPS.CONFIRM && (
             <ConfirmView
               data={formData}
               onBack={handleBackToEdit}
               onComplete={handleToComplete}
             />
           )}
-          {step === 'complete' && <CompleteView data={formData} />}
+          {step === STEPS.COMPLETE && <CompleteView data={formData} />}
         </form>
       </div>
     </ThemeProvider>
