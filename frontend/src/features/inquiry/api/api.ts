@@ -1,11 +1,11 @@
-import type { state } from '../state/context';
+import type { InquiryFormData } from '../types/types';
 
 /**
  * 問い合わせを送信する
  * @param Payload
  * @returns
  */
-export const submitAPI = async (Payload: typeof state) => {
+export const submitAPI = async (Payload: InquiryFormData) => {
   try {
     const response = await fetch('/api/inquiries.php', {
       method: 'POST',
