@@ -1,7 +1,5 @@
-import { state } from "../state/context";
-import { STEPS } from "../types/types";
-import { toConfirmHandler } from "./toConfirmHandler";
-import { loadSession, writeForm } from "../adapters/formDataAdapter";
+import { STEPS } from '../types/types';
+import { loadSession, writeForm } from '../adapters/formDataAdapter';
 
 /**
  * ルートを処理する
@@ -17,16 +15,18 @@ export const routeHandler = (): void => {
       break;
     case STEPS.CONFIRM:
       console.log('case: STEPS.CONFIRM');
-      setStateFromSession();
 
       // 入力データがない場合は入力画面へ戻すなどの制御もここで行う
-      if (!state.name || !state.email || !state.subject || !state.message) {
+      if (
+        !loadSession()?.name ||
+        !loadSession()?.email ||
+        !loadSession()?.subject ||
+        !loadSession()?.message
+      ) {
         history.replaceState(null, '', STEPS.EDIT);
         break;
       }
 
-      toConfirmHandler(new Event('click'));
-      
       break;
     case STEPS.COMPLETE:
       // URLが完了画面で読み込まれた場合は自動的に入力画面に戻す
@@ -45,23 +45,20 @@ export const routeHandler = (): void => {
 /**
  * sessionStorage からフォームの各入力欄に値を復元する
  */
-const restoreFormFromSession = (form: HTMLFormElement): void => {
-  const savedValues = loadSession();
-  if (!savedValues) return;
+// const restoreFormFromSession = (form: HTMLFormElement): void => {
+//   const savedValues = loadSession();
+//   if (!savedValues) return;
 
-  // フォームの各要素に値をセットする
-  writeForm(form, savedValues);
-};
+//   // フォームの各要素に値をセットする
+//   writeForm(form, savedValues);
+// };
 
 /**
  * sessionStorage から状態を復元する
  */
-const setStateFromSession = (): void => {
-  const savedValues = loadSession();
-  if (!savedValues) return;
+// const setStateFromSession = (form: HTMLFormElement): void => {
+//   const savedValues = loadSession();
+//   if (!savedValues) return;
 
-  state.name = savedValues?.name || '';
-  state.email = savedValues?.email || '';
-  state.subject = savedValues?.subject || '';
-  state.message = savedValues?.message || '';
-};
+//   writeForm(form, savedValues);
+// };
