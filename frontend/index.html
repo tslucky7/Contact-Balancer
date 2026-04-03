@@ -5,59 +5,11 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contact-Balancer</title>
+    <script type="module" src="/src/main.tsx"></script>
   </head>
-  <body>
-    <div class="container mx-auto">
-      <h1 id="inquiry-heading" class="heading font-bold text-3xl">お問い合わせ</h1>
-      <p>以下の項目をご入力ください。* は必須項目です。</p>
-      <div
-        class="form-wrapper mt-5 p-5 border border-gray-700 rounded-lg border-solid"
-      >
-        <form id="inquiryForm" class="px-2">
-          <div id="step-edit" class="flex flex-col gap-y-4">
-            <input
-              name="name"
-              placeholder="お名前"
-              required
-              class="border p-2 w-full rounded-sm"
-              autocomplete="name"
-            />
-            <input
-              name="email"
-              type="email"
-              placeholder="メール"
-              required
-              class="border p-2 w-full rounded-sm"
-              autocomplete="email"
-            />
-            <input
-              name="subject"
-              placeholder="件名"
-              required
-              class="border p-2 w-full rounded-sm"
-            />
-            <textarea
-              name="message"
-              placeholder="内容"
-              required
-              class="border p-2 w-full rounded-sm"
-            ></textarea>
-            <button
-              id="inquiry-to-confirm-button"
-              class="border px-4 py-2 bg-indigo-900 text-white text-base w-max text-right"
-              type="button"
-            >
-              入力内容の確認へ進む
-            </button>
-          </div>
-
-          <div id="step-confirm" class=""></div>
-
-          <div id="step-complete" class=""></div>
-        </form>
-      </div>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 transition-colors">
+    <div class="container mx-auto max-w-3xl p-4 sm:p-8">
+      <div id="root" class=""></div>
     </div>
-
-    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

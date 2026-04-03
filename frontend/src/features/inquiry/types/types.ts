@@ -1,17 +1,28 @@
-export interface InquiryFormData {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
+import schema from '../../../../../shared/schemas/inquiry.schema.json';
+
+// schemaの実体からキーを導出
+type InquiryFieldKey = keyof typeof schema.properties;
+
+// formDataはキー自動追従
+export type InquiryFormData = Record<InquiryFieldKey, string>;
+
+interface InquirySchemaProperty {
+  type: 'string';
+  title: string;
+  description?: string;
+  minLength?: number;
+  maxLength?: number;
+  format?: 'email';
 }
 
-export interface InquiryDom {
-  form: HTMLFormElement;
-  heading: HTMLHeadingElement;
-  stepEdit: HTMLDivElement;
-  stepConfirm: HTMLDivElement;
-  stepComplete: HTMLDivElement;
-  toConfirmButton: HTMLButtonElement;
+export interface InquirySchema {
+  $schema: string;
+  title: string;
+  description: string;
+  type: 'object';
+  properties: Record<keyof InquiryFormData, InquirySchemaProperty>;
+  required: (keyof InquiryFormData)[];
+  additionalProperties: boolean;
 }
 
 export const STEPS: {
@@ -24,4 +35,4 @@ export const STEPS: {
   COMPLETE: '/complete',
 } as const;
 
-export type Step = typeof STEPS[keyof typeof STEPS];
+export type Step = (typeof STEPS)[keyof typeof STEPS];
