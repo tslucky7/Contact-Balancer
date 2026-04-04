@@ -7,22 +7,22 @@ const ajv = new Ajv();
 ajvFormats(ajv);
 
 /**
- * 問い合わせフォームの入力データを検証
+ * 問い合わせフォームの入力データの検証を行う
  * @param data
  * @returns
  */
 export const validateInquiry = (data: InquiryFormData): boolean => {
   const isValid = ajv.validate(schema, data);
   return isValid;
-};  
+};
 
 /**
  * 検証エラーの取得
  * @returns
  */
-export const getValidationErrors = (): string[] => {
+const getValidationErrors = (): string[] => {
   const errors = ajv.errors;
-  return errors?.map((error) => error?.message ?? '') as string[] ?? [];
+  return (errors?.map((error) => error?.message ?? '') as string[]) ?? [];
 };
 
 /**
@@ -30,16 +30,18 @@ export const getValidationErrors = (): string[] => {
  * @param errors
  * @returns
  */
-export const getValidationErrorMessage = (errors: string[]): string => {
+const getValidationErrorMessage = (errors: string[]): string => {
   return errors.join('\n');
 };
 
 /**
- * 問い合わせフォームの入力データを検証
+ * 問い合わせフォームの入力データの検証をし、データに不備があればエラーメッセージを取得
  * @param data
  * @returns
  */
-export const getInquiryValidationMessage = (data: InquiryFormData): string | null => {
+export const getInquiryValidationMessage = (
+  data: InquiryFormData,
+): string | null => {
   const isValid = validateInquiry(data);
   if (!isValid) {
     const errors = getValidationErrors();
