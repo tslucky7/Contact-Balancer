@@ -1,23 +1,67 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   STEPS,
   type InquiryFormData,
   type Step,
 } from '../features/inquiry/types/types.ts';
-
 import { createEmptyFormData } from '../features/inquiry/model/formData';
-import { getInquiryValidationMessage } from '../features/inquiry/validation/inquiryValidator';
+import {
+  validateInquiry,
+  getInquiryValidationMessage,
+} from '../features/inquiry/validation/inquiryValidator';
 import {
   clearSession,
+  loadSession,
   saveSession,
 } from '../features/inquiry/adapters/formDataAdapter';
-
 import { submitAPI } from '../features/inquiry/api/api';
 
 export const useInquiryForm = () => {
   const [step, setStep] = useState<Step>(STEPS.EDIT as Step);
   const [formData, setFormData] =
     useState<InquiryFormData>(createEmptyFormData);
+
+  /**
+   * - 読み込み時にSesstionStorageから入力内容を復元
+   * - パスに応じてstepを更新し、urlのパスを制御
+   */
+  useEffect(() => {
+    const savedData = loadSession();
+    if (savedData) setFormData(savedData);
+    const pathname = window.location.pathname;
+    const { step, replaceTo } = resolveStepByPath(pathname, savedData);
+
+    setStep(step);
+    if (replaceTo) {
+      history.replaceState(null, '', replaceTo);
+    }
+  }, []);
+
+  /**
+   * パスに応じてstepを更新する
+   * - 確認画面ではSessionStorageにデータが保存されていれば、バリデーションを行い画面の状態を保つ
+   * @param pathname
+   * @param savedData
+   * @returns { step: Step, replaceTo: string | null }
+   */
+  function resolveStepByPath(
+    pathname: string,
+    savedData: InquiryFormData | null,
+  ) {
+    switch (pathname) {
+      case STEPS.EDIT:
+        return { step: STEPS.EDIT };
+      case STEPS.CONFIRM:
+        if (!savedData || !validateInquiry(savedData)) {
+          return { step: STEPS.EDIT, replaceTo: STEPS.EDIT };
+        }
+        return { step: STEPS.CONFIRM };
+      case STEPS.COMPLETE:
+        return { step: STEPS.EDIT, replaceTo: STEPS.EDIT };
+      default:
+        return { step: STEPS.EDIT, replaceTo: STEPS.EDIT };
+    }
+  }
 
   /**
    * フォームのデータを更新する
@@ -54,7 +98,7 @@ export const useInquiryForm = () => {
     setStep(STEPS.CONFIRM);
     setFormData(formData);
     saveSession(formData);
-    // router.push('/confirm') など
+    history.pushState(null, '', STEPS.CONFIRM);
   };
 
   /**
@@ -63,6 +107,7 @@ export const useInquiryForm = () => {
    */
   const handleBackToEdit = () => {
     setStep(STEPS.EDIT);
+    history.replaceState(null, '', STEPS.EDIT);
   };
 
   /**
@@ -88,6 +133,7 @@ export const useInquiryForm = () => {
 
       clearSession();
       setStep(STEPS.COMPLETE);
+      history.pushState(null, '', STEPS.COMPLETE);
     } catch (error) {
       console.error('The connection failed.', error);
     }
